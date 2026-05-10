@@ -39,15 +39,25 @@ export function createVirtualInput(): VirtualInput {
 
 export function mountPromptcadeGame(canvas: HTMLCanvasElement, spec: GameSpec, virtualInput = createVirtualInput()) {
   const palette = resolvePalette(spec.palette);
-  const k = kaplay({
-    canvas,
-    width: GAME_WIDTH,
-    height: GAME_HEIGHT,
-    background: hexToRgb(palette.background),
-    global: false,
-    debug: false,
-    crisp: true,
-  });
+  const warn = console.warn;
+  console.warn = (...args: unknown[]) => {
+    if (String(args[0] ?? "").includes("KAPLAY already initialized")) return;
+    warn(...args);
+  };
+  let k = null as unknown as ReturnType<typeof kaplay>;
+  try {
+    k = kaplay({
+      canvas,
+      width: GAME_WIDTH,
+      height: GAME_HEIGHT,
+      background: hexToRgb(palette.background),
+      global: false,
+      debug: false,
+      crisp: true,
+    });
+  } finally {
+    console.warn = warn;
+  }
 
   const controls = createControls(k, virtualInput);
   const rng = mulberry32(hash(JSON.stringify(spec)));

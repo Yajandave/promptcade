@@ -19,6 +19,13 @@ export function GameSpecCard({ spec, source, warnings }: GameSpecCardProps) {
   }
 
   const palette = resolvePalette(spec.palette);
+  const objective = spec.mechanics?.objectiveType?.replace("_", " ") ?? "template objective";
+  const castNames = [
+    spec.cast?.player?.name,
+    ...(spec.cast?.opponents ?? []).slice(0, 2).map((entity) => entity.name),
+    ...(spec.cast?.hazards ?? []).slice(0, 2).map((entity) => entity.name),
+    ...(spec.cast?.helpers ?? []).slice(0, 2).map((entity) => entity.name),
+  ].filter(Boolean);
 
   return (
     <aside className="spec-card">
@@ -50,6 +57,14 @@ export function GameSpecCard({ spec, source, warnings }: GameSpecCardProps) {
           <dd>{spec.collectible}</dd>
         </div>
         <div>
+          <dt>Objective</dt>
+          <dd>{objective}</dd>
+        </div>
+        <div>
+          <dt>World rule</dt>
+          <dd>{spec.creativeBrief?.worldRule ?? spec.goal}</dd>
+        </div>
+        <div>
           <dt>Palette</dt>
           <dd>
             <span className="swatch" style={{ background: palette.accent }} />
@@ -57,6 +72,20 @@ export function GameSpecCard({ spec, source, warnings }: GameSpecCardProps) {
           </dd>
         </div>
       </dl>
+      {castNames.length > 0 ? (
+        <div className="spec-chips" aria-label="Generated game cast">
+          {castNames.slice(0, 7).map((name) => (
+            <span key={name}>{name}</span>
+          ))}
+        </div>
+      ) : null}
+      {spec.presentation?.jokeEvents?.length ? (
+        <div className="event-list">
+          {spec.presentation.jokeEvents.slice(0, 3).map((event) => (
+            <p key={`${event.time}-${event.text}`}>{event.text}</p>
+          ))}
+        </div>
+      ) : null}
       {warnings.length > 0 ? (
         <div className="warning-stack">
           {warnings.map((warning) => (
@@ -67,4 +96,3 @@ export function GameSpecCard({ spec, source, warnings }: GameSpecCardProps) {
     </aside>
   );
 }
-
