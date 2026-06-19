@@ -420,6 +420,38 @@ button:disabled {
   flex: 0 0 auto;
 }
 
+.spec-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.spec-chips span {
+  border: 1px solid rgba(0, 229, 255, 0.34);
+  border-radius: 999px;
+  padding: 6px 8px;
+  background: rgba(0, 229, 255, 0.08);
+  color: var(--cyan);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+}
+
+.event-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.event-list p {
+  margin: 0;
+  border-left: 3px solid var(--pink);
+  padding-left: 10px;
+  color: #ffc8ef;
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
 .warning-stack {
   display: grid;
   gap: 8px;
